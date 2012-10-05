@@ -12,5 +12,7 @@
 
 +(NSString *)formatObject:(id)obj;
 
++(void)setDataDescriptionTruncation:(NSUInteger)maxBytes;
+
 @end
 

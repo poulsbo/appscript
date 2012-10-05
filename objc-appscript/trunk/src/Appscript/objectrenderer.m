@@ -5,6 +5,7 @@
 
 #import "objectrenderer.h"
 
+static NSUInteger dataDescriptionTruncation = (NSUInteger)-1;
 
 @implementation AEMObjectRenderer
 
@@ -103,8 +104,26 @@
 		[self formatObject: [obj description] indent: @"" result: result];
 		[result appendString: @"]"];
 	
-	} else
-		[result appendFormat: @"%@", obj];
+	} else if ([obj isKindOfClass:[NSAppleEventDescriptor class]]) {
+		NSString *s = [obj description];
+                if ([s hasPrefix:@"<NSAppleEventDescriptor:"]) {
+                	NSArray *bits = [s componentsSeparatedByString:@"$"];
+                        if ([bits count] == 3) {
+                        	NSString *d = [bits objectAtIndex:1];
+                                NSUInteger length = [d length];
+                                if (length / 2 > dataDescriptionTruncation) {
+                                	s = [NSString stringWithFormat:@"%@%d:$%@...$%@",
+                                             [bits objectAtIndex:0], 
+                                             (int)length / 2,
+                                             [d substringToIndex:dataDescriptionTruncation * 2],
+                                             [bits objectAtIndex:2]];
+                                }
+                        }
+                }
+                [result appendString:s];
+        } else {
+        	[result appendFormat:@"%@", obj];
+        }
 }
 
 
@@ -117,5 +136,8 @@
 	return result;
 }
 
++(void)setDataDescriptionTruncation:(NSUInteger)maxBytes {
+    dataDescriptionTruncation = maxBytes;
+}
 
 @end
