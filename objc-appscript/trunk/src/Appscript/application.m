@@ -17,12 +17,12 @@
 							bundleID:(NSString *)bundleID
 								name:(NSString *)name
 							   error:(out NSError **)error {
-	OSErr err;
+	OSStatus err;
 	CFURLRef outAppURL;
 	NSString *errorDescription;
 	NSDictionary *errorInfo;
 	
-	*error = nil;
+	if (error) *error = nil;
 	err = LSFindApplicationForInfo(creator,
 								   (CFStringRef)bundleID,
 								   (CFStringRef)name,
@@ -70,7 +70,7 @@
 	NSDictionary *errorInfo;
 	pid_t pid;
 	
-	*error = nil;
+	if (error) *error = nil;
 	if (!fileURL || !CFURLGetFSRef((CFURLRef)fileURL, &desired)) {
 		err = errFSBadFSRef;
 		goto error;
@@ -155,7 +155,7 @@ error:
 	NSString *errorDescription;
 	NSDictionary *errorInfo;
 	
-	*error = nil;
+	if (error) *error = nil;
 	if (!fileURL || !CFURLGetFSRef((CFURLRef)fileURL, &fsRef)) {
 		err = fnfErr;
 		goto error;
