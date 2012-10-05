@@ -223,7 +223,8 @@ static ASEventAttributeDescription attributeKeys[] = {
  */
 
 - (id)sendWithMode:(AESendMode)sendMode timeout:(long)timeoutInTicks error:(out NSError **)error {
-	OSErr err, errorNumber;
+	OSErr err;
+	OSStatus errorNumber;
 	NSString *errorString, *errorDescription;
 	NSDictionary *errorInfo;
 	AEDesc replyDesc = {typeNull, NULL};
@@ -253,8 +254,8 @@ static ASEventAttributeDescription attributeKeys[] = {
 		}
 		// for any other Apple Event Manager errors, generate an NSError if one is requested, then return nil
 		if (error) {
-			errorDescription = [NSString stringWithFormat: @"Apple Event Manager error: %@ (%i)", 
-															ASDescriptionForError(errorNumber), errorNumber];
+			errorDescription = [NSString stringWithFormat: @"Apple Event Manager error: %@ (%ld)",
+															ASDescriptionForError(errorNumber), (long)errorNumber];
 			errorInfo = [NSDictionary dictionaryWithObjectsAndKeys: 
 					errorDescription,						NSLocalizedDescriptionKey,
 					[NSNumber numberWithInt: errorNumber],	kASErrorNumberKey,
@@ -282,10 +283,10 @@ static ASEventAttributeDescription attributeKeys[] = {
 		if (error) {
 			errorString = [[replyData paramDescriptorForKeyword: keyErrorString] stringValue];
 			if (errorString)
-				errorDescription = [NSString stringWithFormat: @"Application error: %@ (%i)", errorString, errorNumber];
+				errorDescription = [NSString stringWithFormat: @"Application error: %@ (%ld)", errorString, (long)errorNumber];
 			else
-				errorDescription = [NSString stringWithFormat: @"Application error: %@ (%i)", 
-																ASDescriptionForError(errorNumber), errorNumber];
+				errorDescription = [NSString stringWithFormat: @"Application error: %@ (%ld)",
+																ASDescriptionForError(errorNumber), (long)errorNumber];
 			errorInfo = [NSMutableDictionary dictionaryWithObjectsAndKeys: 
 					errorDescription,						NSLocalizedDescriptionKey,
 					[NSNumber numberWithInt: errorNumber],	kASErrorNumberKey,
@@ -323,7 +324,7 @@ static ASEventAttributeDescription attributeKeys[] = {
 		if (resultType != typeWildCard) {
 			NSMutableArray *resultList;
 			NSAppleEventDescriptor *item;
-			int i, length;
+			NSInteger i, length;
 			resultList = [NSMutableArray array];
 			length = [result numberOfItems];
 			for (i = 1; i <= length; i++) {

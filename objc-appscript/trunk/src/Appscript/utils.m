@@ -13,7 +13,7 @@ NSString *ASDescriptionForError(OSStatus err) {
 		if (errorString && ![errorString isEqual: @""])
 			return errorString;
 	}
-	return [NSString stringWithFormat: @"Mac OS error %i", err];
+	return [NSString stringWithFormat: @"Mac OS error %ld", (long)err];
 }
 
 
