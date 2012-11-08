@@ -283,7 +283,7 @@ fail:
 	}
 	// format attributes
 	if (timeout != kAEDefaultTimeout)
-		result = [NSString stringWithFormat: @"[%@ timeout: %i]", result, timeout / 60];
+		result = [NSString stringWithFormat: @"[%@ timeout: %ld]", result, (long)(timeout / 60)];
 	if (sendMode != (kAEWaitReply | kAECanSwitchLayer)) {
 		if ((sendMode & ~(kAEWaitReply | kAEQueueReply | kAENoReply)) == kAECanSwitchLayer) {
 			if (sendMode & kAENoReply)
@@ -291,10 +291,10 @@ fail:
 			if (sendMode & kAEQueueReply)
 				result = [NSString stringWithFormat: @"[%@ queueReply]", result];
 		} else
-			result = [NSString stringWithFormat: @"[%@ sendMode: %#08x]", result, sendMode];
+			result = [NSString stringWithFormat: @"[%@ sendMode: %#08lx]", result, (long)sendMode];
 	}
 	if (considsAndIgnoresFlags != kAECaseIgnoreMask)
-		result = [NSString stringWithFormat: @"[%@ considering: %#08x]", result, considsAndIgnoresFlags];
+		result = [NSString stringWithFormat: @"[%@ considering: %#08lx]", result, (long)considsAndIgnoresFlags];
 	// format unpacking options
 	[AS_event getUnpackFormat: &format type: &type];
 	if (format == kAEMUnpackAsItem && type != typeWildCard)

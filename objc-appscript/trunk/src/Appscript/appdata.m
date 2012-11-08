@@ -57,7 +57,7 @@
 			target = [[aemApplicationClass alloc] initWithURL: targetData error: error];
 			break;
 		case kASTargetPID:
-			target = [[aemApplicationClass alloc] initWithPID: [targetData unsignedLongValue]];
+			target = [[aemApplicationClass alloc] initWithPID: (pid_t)[targetData unsignedLongValue]];
 			break;
 		case kASTargetDescriptor:
 			target = [[aemApplicationClass alloc] initWithDescriptor: targetData];
@@ -90,7 +90,7 @@
 				result = [AEMApplication processExistsForEppcURL: targetData];
 			break;
 		case kASTargetPID:
-			result = [AEMApplication processExistsForPID: [targetData unsignedLongValue]];
+			result = [AEMApplication processExistsForPID: (pid_t)[targetData unsignedLongValue]];
 			break;
 		case kASTargetDescriptor:
 			result = [AEMApplication processExistsForDescriptor: targetData];

@@ -26,7 +26,7 @@
 #define CHECK_CURSOR \
 	if (cursor > aeteSize) \
 		[NSException raise: @"Bad aete" \
-					format: @"Data ended prematurely (%i bytes expected, %i bytes read)", \
+					format: @"Data ended prematurely (%lu bytes expected, %lu bytes read)", \
 							aeteSize, cursor];
 
 
@@ -435,12 +435,12 @@
 	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
 	NSEnumerator *enumerator;
 	NSString *code;
-	int i;
+	NSUInteger i;
 	
 	if ([aetes isKindOfClass: [NSAppleEventDescriptor class]]) {
 		if ([aetes descriptorType] != typeAEList)
 			aetes = [aetes coerceToDescriptorType: typeAEList];
-		for (i = 1; i <= [aetes numberOfItems]; i++)
+		for (i = 1; (NSInteger)i <= [aetes numberOfItems]; i++)
 			[self parseAETEDescriptor: [aetes descriptorAtIndex: i]];
 	} else if ([aetes isKindOfClass: [NSArray class]]) {
 		for (i = 0; i < [aetes count]; i++)

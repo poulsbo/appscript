@@ -12,7 +12,7 @@ static NSUInteger dataDescriptionTruncation = (NSUInteger)-1;
 +(NSString *)formatOSType:(OSType)code {
 	NSMutableString *str;
 	char c;
-	int i;
+	size_t i;
 	
 	code = CFSwapInt32HostToBig(code);
 	str = [NSMutableString stringWithCapacity: 16];
