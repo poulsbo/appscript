@@ -394,9 +394,10 @@ void disposeSpecifierModule(void) {
 }
 
 - (AEMAllElementsSpecifier *)elements:(OSType)classCode {
-	return [[[AEMAllElementsSpecifier alloc]
-						  initWithContainer: self
-								   wantCode: classCode] autorelease];
+//	return [[[AEMAllElementsSpecifier alloc]
+//						  initWithContainer: self
+//								   wantCode: classCode] autorelease];
+    return nil;  // TODO LIU FIX
 }
 
 

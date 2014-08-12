@@ -36,5 +36,6 @@
 /**********************************************************************/
 // called by -[AEMCodecs init]
 
-void AEMGetDefaultUnitTypeDefinitions(NSDictionary **definitionsByName,
-									  NSDictionary **definitionsByCode);
+// LIU
+void AEMGetDefaultUnitTypeDefinitions(NSMutableDictionary **definitionsByName,
+									  NSMutableDictionary **definitionsByCode);

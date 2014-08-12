@@ -35,15 +35,18 @@ static NSAppleEventDescriptor *defaultIgnore;
 	timeout = kAEDefaultTimeout;
 	considsAndIgnoresFlags = kAECaseIgnoreMask;
 	// if -targetWithError: fails, store NSError and return it when -sendWithError: is invoked
-	id target = [appData targetWithError: &targetError];
+    __autoreleasing NSError *localTargetError;
+    targetError = localTargetError;
+	id target = [appData targetWithError: &localTargetError];
 	if (!target) goto fail;
 	// if an application specified by path has quit/restart, its AEAddressDesc is no longer valid;
 	// this code will automatically restart it (or not) according to client-specified auto-relaunch policy
 	ASRelaunchMode relaunchPolicy = [appData relaunchMode];
 	if (relaunchPolicy != kASRelaunchNever && [target targetType] == kAEMTargetFileURL
 			&& ![AEMApplication processExistsForPID: [[target descriptor] int32Value]]) {
-		if (relaunchPolicy == kASRelaunchAlways || classCode == kCoreEventClass && code == kAEOpenApplication) {
-			BOOL success = [target reconnectWithError: &targetError];
+		if (relaunchPolicy == kASRelaunchAlways || (classCode == kCoreEventClass && code == kAEOpenApplication)) {
+			BOOL success = [target reconnectWithError: &localTargetError];
+            targetError = localTargetError;
 			if (!success) goto fail;
 		}
 	}
@@ -51,11 +54,11 @@ static NSAppleEventDescriptor *defaultIgnore;
 	AS_event = [[target eventWithEventClass: classCode eventID: code codecs: appData] retain];
 	// set event's direct parameter and/or subject attribute
 	// note: AEMEvent/AEMCodecs instance will raise exception if this fails
-	if (directParameter != kASNoDirectParameter)
+	if (directParameter != (__bridge id)kASNoDirectParameter)
 		[AS_event setParameter: directParameter forKeyword: keyDirectObject];
 	if ([parentReference AS_aemReference] == AEMApp) 
 		[AS_event setAttribute: [NSNull null] forKeyword: keySubjectAttr];
-	else if (directParameter == kASNoDirectParameter)
+	else if (directParameter == (__bridge id)kASNoDirectParameter)
 		[AS_event setParameter: parentReference forKeyword: keyDirectObject];
 	else
 		[AS_event setAttribute: parentReference forKeyword: keySubjectAttr];

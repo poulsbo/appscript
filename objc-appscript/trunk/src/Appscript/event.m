@@ -22,28 +22,33 @@ NSString *const kASErrorFailedEvent			= @"ErrorFailedEvent";
 /**********************************************************************/
 // Attribute keys
 
-typedef struct {
-	NSString *name;
-	OSType code;
-}  ASEventAttributeDescription;
+//typedef struct {
+//	NSString *name;
+//	OSType code;
+//}  ASEventAttributeDescription;
+@interface ASEventAttributeDescription : NSObject
+@property (copy) NSString *name;
+@property OSType code;
+@end
 
 // All known Apple event attributes:
-static ASEventAttributeDescription attributeKeys[] = {
-	{@"EventClass       ", keyEventClassAttr},
-	{@"EventID          ", keyEventIDAttr},
-	{@"TransactionID    ", keyTransactionIDAttr},
-	{@"ReturnID         ", keyReturnIDAttr},
-	{@"Address          ", keyAddressAttr},
-	{@"OptionalKeyword  ", keyOptionalKeywordAttr},
-	{@"Timeout          ", keyTimeoutAttr},
-	{@"InteractLevel    ", keyInteractLevelAttr},
-	{@"EventSource      ", keyEventSourceAttr},
-	{@"OriginalAddress  ", keyOriginalAddressAttr},
-	{@"AcceptTimeout    ", keyAcceptTimeoutAttr},
-	{@"Considerations   ", enumConsiderations},
-	{@"ConsidsAndIgnores", enumConsidsAndIgnores},
-	{@"Subject          ", keySubjectAttr},
-	{nil, 0}
+static ASEventAttributeDescription *attributeKeys[] = {
+    // TODO FIX LIU
+//	{@"EventClass       ", keyEventClassAttr},
+//	{@"EventID          ", keyEventIDAttr},
+//	{@"TransactionID    ", keyTransactionIDAttr},
+//	{@"ReturnID         ", keyReturnIDAttr},
+//	{@"Address          ", keyAddressAttr},
+//	{@"OptionalKeyword  ", keyOptionalKeywordAttr},
+//	{@"Timeout          ", keyTimeoutAttr},
+//	{@"InteractLevel    ", keyInteractLevelAttr},
+//	{@"EventSource      ", keyEventSourceAttr},
+//	{@"OriginalAddress  ", keyOriginalAddressAttr},
+//	{@"AcceptTimeout    ", keyAcceptTimeoutAttr},
+//	{@"Considerations   ", enumConsiderations},
+//	{@"ConsidsAndIgnores", enumConsidsAndIgnores},
+//	{@"Subject          ", keySubjectAttr},
+//	{nil, 0}
 };
 
 

@@ -72,13 +72,15 @@ static ASBoolean *falseValue;
 												 (CFStringRef)path,
 												 kCFURLHFSPathStyle,
 												 0);
-	return [(NSURL *)(url ? CFMakeCollectable(url) : nil) autorelease];
+//	return [(__bridge NSURL *)CFBridgingRelease(url ? CFMakeCollectable(url) : nil) autorelease];
+    return CFBridgingRelease(url);
 }
 
 + (NSString *)URLToHFSPath:(NSURL *)url {
 	CFStringRef path = CFURLCopyFileSystemPath((CFURLRef)url, 
 											   kCFURLHFSPathStyle);
-	return [(NSString *)(path ? CFMakeCollectable(path) : nil) autorelease];
+//	return [(__bridge NSString *)(path ? CFMakeCollectable(path) : nil) autorelease];
+    return CFBridgingRelease(path);
 }
 
 

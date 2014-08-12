@@ -24,8 +24,8 @@
 	
 	if (error) *error = nil;
 	err = LSFindApplicationForInfo(creator,
-								   (CFStringRef)bundleID,
-								   (CFStringRef)name,
+								   (CFStringRef)CFBridgingRetain(bundleID),
+								   (CFStringRef)CFBridgingRetain(name),
 								   NULL,
 								   &outAppURL);
 	if (err) {
@@ -41,12 +41,12 @@
 		}
 		return nil;
 	}
-	return (NSURL *)outAppURL;
+	return (NSURL *)CFBridgingRelease(outAppURL);
 }
 
 + (NSURL *)findApplicationForName:(NSString *)name error:(out NSError **)error {
 	NSURL *url;
-	NSError *err;
+	__autoreleasing NSError *err;
 	
 	if (!error) error = &err;
 	*error = nil;
@@ -232,7 +232,7 @@ error:
 + (NSAppleEventDescriptor*)addressDescForLocalApplication:(NSURL *)fileURL error:(out NSError **)error {
 	NSError *tempError = nil;
 	pid_t pid;
-	NSError *err;
+	__autoreleasing NSError *err;
 	
 	if (!error) error = &err;
 	*error = nil;
@@ -269,7 +269,7 @@ error:
 	if (!eppcURL) return nil;
 	data = CFURLCreateData(NULL, (CFURLRef)eppcURL, kCFStringEncodingUTF8, YES);
 	desc = [NSAppleEventDescriptor descriptorWithDescriptorType: typeApplicationURL
-														   data: (NSData *)data];
+														   data: (__bridge NSData *)data];
 	CFRelease(data);
 	return desc;
 }
@@ -331,7 +331,7 @@ error:
 
 - (id)initWithName:(NSString *)name error:(out NSError **)error {
 	NSURL *url;
-	NSError *err;
+	__autoreleasing NSError *err;
 	
 	if (!error) error = &err;
 	*error = nil;
@@ -342,7 +342,7 @@ error:
 
 - (id)initWithBundleID:(NSString *)bundleID error:(out NSError **)error {
 	NSURL *url;
-	NSError *err;
+	__autoreleasing NSError *err;
 	
 	if (!error) error = &err;
 	*error = nil;
@@ -355,7 +355,7 @@ error:
 }
 
 - (id)initWithURL:(NSURL *)url error:(out NSError **)error {
-	NSError *err;
+	__autoreleasing NSError *err;
 	
 	if (!error) error = &err;
 	*error = nil;

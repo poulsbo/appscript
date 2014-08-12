@@ -9,46 +9,52 @@
 /**********************************************************************/
 // default unit types
 
-typedef struct {
-	NSString *name;
-	DescType code;
-} AEMDefaultUnitTypeDef;
+//typedef struct {
+//	NSString *name;
+//	DescType code;
+//} AEMDefaultUnitTypeDef;
+// LIU
+@interface AEMDefaultUnitTypeDef
+@property (copy) NSString *name;
+@property DescType code;
+@end
 
 
-static AEMDefaultUnitTypeDef defaultUnitTypes[] = {
-	{@"centimeters", 'cmtr'},
-	{@"meters", 'metr'},
-	{@"kilometers", 'kmtr'},
-	{@"inches", 'inch'},
-	{@"feet", 'feet'},
-	{@"yards", 'yard'},
-	{@"miles", 'mile'},
-	
-	{@"square meters", 'sqrm'},
-	{@"square kilometers", 'sqkm'},
-	{@"square feet", 'sqft'},
-	{@"square yards", 'sqyd'},
-	{@"square miles", 'sqmi'},
-	
-	{@"cubic centimeters", 'ccmt'},
-	{@"cubic meters", 'cmet'},
-	{@"cubic inches", 'cuin'},
-	{@"cubic feet", 'cfet'},
-	{@"cubic yards", 'cyrd'},
-	
-	{@"liters", 'litr'},
-	{@"quarts", 'qrts'},
-	{@"gallons", 'galn'},
-	
-	{@"grams", 'gram'},
-	{@"kilograms", 'kgrm'},
-	{@"ounces", 'ozs '},
-	{@"pounds", 'lbs '},
-	
-	{@"degrees Celsius", 'degc'},
-	{@"degrees Fahrenheit", 'degf'},
-	{@"degrees Kelvin", 'degk'},
-	{nil, 0}
+// LIU TODO FIX
+static AEMDefaultUnitTypeDef *defaultUnitTypes[] = {
+//	{@"centimeters", 'cmtr'},
+//	{@"meters", 'metr'},
+//	{@"kilometers", 'kmtr'},
+//	{@"inches", 'inch'},
+//	{@"feet", 'feet'},
+//	{@"yards", 'yard'},
+//	{@"miles", 'mile'},
+//	
+//	{@"square meters", 'sqrm'},
+//	{@"square kilometers", 'sqkm'},
+//	{@"square feet", 'sqft'},
+//	{@"square yards", 'sqyd'},
+//	{@"square miles", 'sqmi'},
+//	
+//	{@"cubic centimeters", 'ccmt'},
+//	{@"cubic meters", 'cmet'},
+//	{@"cubic inches", 'cuin'},
+//	{@"cubic feet", 'cfet'},
+//	{@"cubic yards", 'cyrd'},
+//	
+//	{@"liters", 'litr'},
+//	{@"quarts", 'qrts'},
+//	{@"gallons", 'galn'},
+//	
+//	{@"grams", 'gram'},
+//	{@"kilograms", 'kgrm'},
+//	{@"ounces", 'ozs '},
+//	{@"pounds", 'lbs '},
+//	
+//	{@"degrees Celsius", 'degc'},
+//	{@"degrees Fahrenheit", 'degf'},
+//	{@"degrees Kelvin", 'degk'},
+//	{nil, 0}
 };
 
 
@@ -104,8 +110,11 @@ static AEMDefaultUnitTypeDef defaultUnitTypes[] = {
 
 /**********************************************************************/
 
-void AEMGetDefaultUnitTypeDefinitions(NSDictionary **definitionsByName,
-									  NSDictionary **definitionsByCode) {
+//void AEMGetDefaultUnitTypeDefinitions(NSDictionary **definitionsByName,
+//                                      NSDictionary **definitionsByCode) {
+// LIU
+void AEMGetDefaultUnitTypeDefinitions(NSMutableDictionary **definitionsByName,
+                                      NSMutableDictionary **definitionsByCode) {
 	static NSMutableDictionary *defaultDefinitionsByName, *defaultDefinitionsByCode;
 	NSString *name;
 	DescType code;

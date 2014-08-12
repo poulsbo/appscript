@@ -29,7 +29,12 @@
 	self = [super init];
 	if (!self) return self;
 	applicationRootDescriptor = [[NSAppleEventDescriptor nullDescriptor] retain];
-	AEMGetDefaultUnitTypeDefinitions(&unitTypeDefinitionByName, &unitTypeDefinitionByCode);
+    //	AEMGetDefaultUnitTypeDefinitions(&unitTypeDefinitionByName, &unitTypeDefinitionByCode);
+    // LIU
+    NSDictionary *byName = nil, *byCode = nil;
+    AEMGetDefaultUnitTypeDefinitions(&byName, &byCode);
+    unitTypeDefinitionByName = byName;
+    unitTypeDefinitionByCode = byCode;
 	[unitTypeDefinitionByName retain];
 	[unitTypeDefinitionByCode retain];
 	disableCache = NO;
@@ -48,7 +53,7 @@
 
 
 - (id)copyWithZone:(NSZone *)zone {
-	AEMCodecs *obj = (AEMCodecs *)NSCopyObject(self, 0, zone);
+    AEMCodecs *obj = [self copy]; // LIU (AEMCodecs *)NSCopyObject(self, 0, zone);
 	if (!obj) return obj;
 	[obj->applicationRootDescriptor retain];
 	return obj;
@@ -624,8 +629,10 @@
 				case formAbsolutePosition:
 					if ([key descriptorType] == typeAbsoluteOrdinal) {
 						if ([key typeCodeValue] == kAEAll)
-							ref = [[[AEMAllElementsSpecifier alloc] initWithContainer: container
-																			 wantCode: wantCode] autorelease];
+                            // TODO FIX LIU
+//							ref = [[[AEMAllElementsSpecifier alloc] initWithContainer: container
+//																			 wantCode: wantCode] autorelease];
+                            ref = nil;
 						else
 							ref = [self fullyUnpackObjectSpecifier: desc]; // do a full unpack of rarely returned reference forms
 					} else {

@@ -104,7 +104,7 @@
 - (BOOL)launchApplicationWithError:(out NSError **)error {
 	NSURL *fileURL = nil;
 	AEMApplication *app;
-	NSError *err;
+	__autoreleasing NSError *err;
 	
 	if (!error) error = &err;
 	*error = nil;

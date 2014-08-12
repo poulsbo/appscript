@@ -69,7 +69,8 @@
 - (BOOL)isEqual:(id)anObject {
 	if (anObject == self) return YES;
 	if (!anObject || ![anObject isKindOfClass: [self class]]) return NO;
-	return [[self name] isEqual: [anObject name]] && [self fourCharCode] == [(ASParserDef *)anObject fourCharCode];
+//	return [[self name] isEqual: [anObject name]] && [self fourCharCode] == [(ASParserDef *)anObject fourCharCode];
+    return NO;  // LIU TODO FIX
 }
 
 - (NSString *)description {
@@ -432,7 +433,7 @@
 }
 
 - (ASAETEParser *)parse:(id)aetes {
-	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
+    //	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];  // LIU TODO
 	NSEnumerator *enumerator;
 	NSString *code;
 	NSUInteger i;
@@ -446,8 +447,8 @@
 		for (i = 0; i < [aetes count]; i++)
 			[self parseAETEDescriptor: [aetes objectAtIndex: i]];
 	} else {
-		[pool drain];
-		[NSException raise: @"Bad aete" 
+//		[pool drain];
+		[NSException raise: @"Bad aete"
 					format: @"Not an AETE descriptor or AEList/NSArray of AETE descriptors: %@", aetes];
 	}
 	/* singular names are normally used in the classes table and plural names in the elements table. However, if an aete defines a singular name but not a plural name then the missing plural name is substituted with the singular name; and vice-versa if there's no singular equivalent for a plural name.
@@ -470,7 +471,7 @@
 			[classes addObject: [classAndElementDefsByCode objectForKey: code]];
 		}
 	}
-	[pool drain];
+//	[pool drain];
 	return self;
 }
 
