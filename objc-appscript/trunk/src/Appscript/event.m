@@ -22,33 +22,28 @@ NSString *const kASErrorFailedEvent			= @"ErrorFailedEvent";
 /**********************************************************************/
 // Attribute keys
 
-//typedef struct {
-//	NSString *name;
-//	OSType code;
-//}  ASEventAttributeDescription;
-@interface ASEventAttributeDescription : NSObject
-@property (copy) NSString *name;
-@property OSType code;
-@end
+typedef struct {
+	const char *name;
+	OSType code;
+}  ASEventAttributeDescription;
 
 // All known Apple event attributes:
-static ASEventAttributeDescription *attributeKeys[] = {
-    // TODO FIX LIU
-//	{@"EventClass       ", keyEventClassAttr},
-//	{@"EventID          ", keyEventIDAttr},
-//	{@"TransactionID    ", keyTransactionIDAttr},
-//	{@"ReturnID         ", keyReturnIDAttr},
-//	{@"Address          ", keyAddressAttr},
-//	{@"OptionalKeyword  ", keyOptionalKeywordAttr},
-//	{@"Timeout          ", keyTimeoutAttr},
-//	{@"InteractLevel    ", keyInteractLevelAttr},
-//	{@"EventSource      ", keyEventSourceAttr},
-//	{@"OriginalAddress  ", keyOriginalAddressAttr},
-//	{@"AcceptTimeout    ", keyAcceptTimeoutAttr},
-//	{@"Considerations   ", enumConsiderations},
-//	{@"ConsidsAndIgnores", enumConsidsAndIgnores},
-//	{@"Subject          ", keySubjectAttr},
-//	{nil, 0}
+static ASEventAttributeDescription attributeKeys[] = {
+	{"EventClass       ", keyEventClassAttr},
+	{"EventID          ", keyEventIDAttr},
+	{"TransactionID    ", keyTransactionIDAttr},
+	{"ReturnID         ", keyReturnIDAttr},
+	{"Address          ", keyAddressAttr},
+	{"OptionalKeyword  ", keyOptionalKeywordAttr},
+	{"Timeout          ", keyTimeoutAttr},
+	{"InteractLevel    ", keyInteractLevelAttr},
+	{"EventSource      ", keyEventSourceAttr},
+	{"OriginalAddress  ", keyOriginalAddressAttr},
+	{"AcceptTimeout    ", keyAcceptTimeoutAttr},
+	{"Considerations   ", enumConsiderations},
+	{"ConsidsAndIgnores", enumConsidsAndIgnores},
+	{"Subject          ", keySubjectAttr},
+	{nil, 0}
 };
 
 
@@ -95,7 +90,7 @@ static ASEventAttributeDescription *attributeKeys[] = {
 								 &aeDesc);
 		if (!err) {
 			descriptor = [[NSAppleEventDescriptor alloc] initWithAEDescNoCopy: &aeDesc];
-			[result appendFormat: @"\n    %@ = %@;", 
+			[result appendFormat: @"\n    %s = %@;", 
 					attributeKeys[i].name,
 					[[AEMCodecs defaultCodecs] unpack: descriptor]];
 		}
@@ -289,11 +284,11 @@ static ASEventAttributeDescription *attributeKeys[] = {
 					nil];
 			if (errorString)
 				[errorInfo setValue: errorString forKey: kASErrorStringKey];
-			if (errorMessage = [replyData paramDescriptorForKeyword: kOSAErrorBriefMessage])
+			if ((errorMessage = [replyData paramDescriptorForKeyword: kOSAErrorBriefMessage]))
 				[errorInfo setValue: [errorMessage stringValue] forKey: kASErrorBriefMessageKey];
-			if (errorObject = [replyData paramDescriptorForKeyword: kOSAErrorOffendingObject])
+			if ((errorObject = [replyData paramDescriptorForKeyword: kOSAErrorOffendingObject]))
 				[errorInfo setValue: [codecs unpack: errorObject] forKey: kASErrorOffendingObjectKey];
-			if (errorType = [replyData paramDescriptorForKeyword: kOSAErrorExpectedType])
+			if ((errorType = [replyData paramDescriptorForKeyword: kOSAErrorExpectedType]))
 				[errorInfo setValue: [codecs unpack: errorType] forKey: kASErrorExpectedTypeKey];
 			*error = [NSError errorWithDomain: kASErrorDomain code: errorNumber userInfo: errorInfo];
 		}

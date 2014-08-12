@@ -20,7 +20,7 @@
 #define SKIP_STRING cursor += (unsigned char)aeteData[cursor]; cursor += 1;
 
 // realign aete data cursor after reading strings
-#define ALIGN cursor += cursor & 1;
+#define AS_ALIGN cursor += cursor & 1;
 
 // perform a bounds check on aete data cursor to protect against malformed aete data
 #define CHECK_CURSOR \
@@ -64,8 +64,7 @@
 - (BOOL)isEqual:(id)anObject {
 	if (anObject == self) return YES;
 	if (!anObject || ![anObject isKindOfClass: [self class]]) return NO;
-//	return [[self name] isEqual: [anObject name]] && [self fourCharCode] == [(ASParserDef *)anObject fourCharCode];
-    return NO;  // LIU TODO FIX
+	return [[self name] isEqual: [(ASParserDef *)anObject name]] && [self fourCharCode] == [(ASParserDef *)anObject fourCharCode];
 }
 
 - (NSString *)description {
@@ -199,7 +198,7 @@
 		NSLog(@"Parse Command %@\n", name);
 	#endif
 	SKIP_STRING;		// description
-	ALIGN;
+	AS_ALIGN;
 	classCode = [self word];
 	code = [self word];
 	commandDef = [[ASParserCommandDef alloc] initWithName: name 
@@ -208,12 +207,12 @@
 	// skip result
 	SKIP_OSTYPE;		// datatype
 	SKIP_STRING;		// description
-	ALIGN;
+	AS_ALIGN;
 	SKIP_UINT16;		// flags
 	// skip direct parameter
 	SKIP_OSTYPE;		// datatype
 	SKIP_STRING;		// description
-	ALIGN;
+	AS_ALIGN;
 	SKIP_UINT16;		// flags
 	// parse keyword parameters
 	/* Note: overlapping command definitions (e.g. InDesign) should be processed as follows:
@@ -223,17 +222,17 @@
 	*/
 	otherCommandDef = [commands objectForKey: name];
 	if (!otherCommandDef
-			|| [commandDef eventClass] == [otherCommandDef eventClass]
-			&& [commandDef eventID] == [otherCommandDef eventID])
+			|| ([commandDef eventClass] == [otherCommandDef eventClass]
+			&& [commandDef eventID] == [otherCommandDef eventID]))
 		[commands setObject: commandDef forKey: name];
 	n = [self integer];
 	for (i = 0; i < n; i++) {
 		paramName = [self name];
-		ALIGN;
+		AS_ALIGN;
 		paramDef = [[ASParserDef alloc] initWithName: paramName code: [self word]];
 		SKIP_OSTYPE;	// datatype
 		SKIP_STRING;	// description
-		ALIGN;
+		AS_ALIGN;
 		SKIP_UINT16;	// flags
 		[commandDef addParameter: paramDef];
 		CHECK_CURSOR;
@@ -253,10 +252,10 @@
 	#ifdef DEBUG
 		NSLog(@"Parse Class %@\n", className);
 	#endif
-	ALIGN;
+	AS_ALIGN;
 	classCode = [self word];
 	SKIP_STRING;		// description
-	ALIGN;
+	AS_ALIGN;
 	// properties
 	n = [self integer];
 	for (i = 0; i < n; i++) {
@@ -264,11 +263,11 @@
 		#ifdef DEBUG
 			NSLog(@"    property: %@\n", propertyName);
 		#endif
-		ALIGN;
+		AS_ALIGN;
 		propertyCode = [self word];
 		SKIP_OSTYPE;	// datatype
 		SKIP_STRING;	// description
-		ALIGN;
+		AS_ALIGN;
 		flags = [self integer];
 		if (propertyCode != kASAEInheritedProperties) {
 			// it's a normal property definition, not a superclass  definition
@@ -312,10 +311,10 @@
 
 - (void)parseComparison { // comparison info isn't used
 	SKIP_STRING;		// name
-	ALIGN;
+	AS_ALIGN;
 	SKIP_OSTYPE;		// code
 	SKIP_STRING;		// description
-	ALIGN;
+	AS_ALIGN;
 }
 
 - (void)parseEnumeration {
@@ -331,13 +330,13 @@
 	// enumerators
 	for (i = 0; i < n; i++) {
 		name = [self name];
-		ALIGN;
+		AS_ALIGN;
 		#ifdef DEBUG
 			NSLog(@"enum: %@\n", [enumeratorDef name]);
 		#endif
 		enumeratorDef = [[ASParserDef alloc] initWithName: name code: [self word]];
 		SKIP_STRING;	// description
-		ALIGN;
+		AS_ALIGN;
 		if (![enumerators containsObject: enumeratorDef])
 			[enumerators addObject: enumeratorDef];
 		CHECK_CURSOR;
@@ -353,7 +352,7 @@
 		SKIP_STRING;	// name string
 	#endif	
 	SKIP_STRING;		// description
-	ALIGN;
+	AS_ALIGN;
 	SKIP_OSTYPE;		// code
 	SKIP_UINT16;		// level
 	SKIP_UINT16;		// version
@@ -403,7 +402,6 @@
 }
 
 - (ASAETEParser *)parse:(id)aetes {
-    //	NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];  // LIU TODO
 	NSEnumerator *enumerator;
 	NSString *code;
 	NSUInteger i;
@@ -417,7 +415,6 @@
 		for (i = 0; i < [aetes count]; i++)
 			[self parseAETEDescriptor: [aetes objectAtIndex: i]];
 	} else {
-//		[pool drain];
 		[NSException raise: @"Bad aete"
 					format: @"Not an AETE descriptor or AEList/NSArray of AETE descriptors: %@", aetes];
 	}
@@ -441,7 +438,6 @@
 			[classes addObject: [classAndElementDefsByCode objectForKey: code]];
 		}
 	}
-//	[pool drain];
 	return self;
 }
 
