@@ -110,6 +110,9 @@
 		case kASTargetURL:
 			if ([targetData isFileURL])
 				fileURL = targetData;
+            break;
+        default:
+            break;
 	}
 	if (fileURL) {
 		[AEMApplication launchApplication: fileURL error: error];

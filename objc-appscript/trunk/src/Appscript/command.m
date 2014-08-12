@@ -84,17 +84,17 @@ fail:
 }
 
 - (id)waitForReply {
-	sendMode = sendMode & ~kAENoReply & ~kAEQueueReply | kAEWaitReply;
+	sendMode = (sendMode & ~kAENoReply & ~kAEQueueReply) | kAEWaitReply;
 	return self;
 }
 
 - (id)ignoreReply {
-	sendMode = sendMode & ~kAEWaitReply & ~kAEQueueReply | kAENoReply;
+	sendMode = (sendMode & ~kAEWaitReply & ~kAEQueueReply) | kAENoReply;
 	return self;
 }
 
 - (id)queueReply {
-	sendMode = sendMode & ~kAENoReply & ~kAEWaitReply | kAEQueueReply;
+	sendMode = (sendMode & ~kAENoReply & ~kAEWaitReply) | kAEQueueReply;
 	return self;
 }
 
