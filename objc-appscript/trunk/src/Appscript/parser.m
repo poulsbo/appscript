@@ -306,7 +306,7 @@
 			[foundClassCodes addObject: code];
 		}
 	}
-	[classAndElementDefsByCode setObject: classDef forKey: code];
+	[classAndElementDefsByCode setObject: classDef forKey: (id <NSCopying>)code];
 }
 
 - (void)parseComparison { // comparison info isn't used

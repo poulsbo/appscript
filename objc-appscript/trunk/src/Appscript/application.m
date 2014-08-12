@@ -24,8 +24,8 @@
 	
 	if (error) *error = nil;
 	err = LSFindApplicationForInfo(creator,
-								   CFBridgingRetain(bundleID),
-								   CFBridgingRetain(name),
+								   (__bridge CFTypeRef)(bundleID),
+								   (__bridge CFStringRef)(name),
 								   NULL,
 								   &outAppURL);
 	if (err) {
@@ -41,7 +41,7 @@
 		}
 		return nil;
 	}
-	return CFBridgingRelease(outAppURL);
+	return (__bridge NSURL *)(outAppURL);
 }
 
 + (NSURL *)findApplicationForName:(NSString *)name error:(out NSError **)error {

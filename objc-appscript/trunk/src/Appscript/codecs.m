@@ -41,6 +41,17 @@
 	return self;
 }
 
+- (id)copyWithZone:(NSZone *)zone {
+    AEMCodecs *copy = [[AEMCodecs allocWithZone:zone] init];
+    copy->applicationRootDescriptor = self->applicationRootDescriptor;
+    copy->unitTypeDefinitionByName = self->unitTypeDefinitionByName;
+    copy->unitTypeDefinitionByCode = self->unitTypeDefinitionByCode;
+    copy->disableCache = self->disableCache;
+    copy->disableUnicode = self->disableUnicode;
+    copy->allowUInt64 = self->allowUInt64;
+    return copy;
+}
+
 
 /**********************************************************************/
 // compatibility options

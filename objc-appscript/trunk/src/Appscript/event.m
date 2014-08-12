@@ -322,8 +322,8 @@ static ASEventAttributeDescription attributeKeys[] = {
 					item = [item coerceToDescriptorType: resultType];
 					if (!item) { // a coercion error occurred
 						if (error) {
-							errorDescription = [NSString stringWithFormat: @"Couldn't coerce item %i of returned list to type '%@': %@", 
-																			i, [AEMObjectRenderer formatOSType: resultType], result];
+							errorDescription = [NSString stringWithFormat: @"Couldn't coerce item %li of returned list to type '%@': %@", 
+																			(long)i, [AEMObjectRenderer formatOSType: resultType], result];
 							errorInfo = [NSDictionary dictionaryWithObjectsAndKeys:
 									[NSAppleEventDescriptor descriptorWithTypeCode: resultType],	kASErrorExpectedTypeKey,
 									originalItem,													kASErrorOffendingObjectKey,
