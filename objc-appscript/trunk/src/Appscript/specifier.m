@@ -102,30 +102,10 @@ void initSpecifierModule(void) {
 void disposeSpecifierModule(void) {
 	disposeTestModule();
 	// insertion locations
-	[kEnumBeginning release];
-	[kEnumEnd release];
-	[kEnumBefore release];
-	[kEnumAfter release];
 	// relative positions
-	[kEnumPrevious release];
-	[kEnumNext release];
 	// absolute ordinals
-	[kOrdinalFirst release];
-	[kOrdinalMiddle release];
-	[kOrdinalLast release];
-	[kOrdinalAny release];
-	[kOrdinalAll release];
 	//key forms
-	[kFormPropertyID release];
-	[kFormUserPropertyID release];
-	[kFormName release];
-	[kFormAbsolutePosition release];
-	[kFormUniqueID release];
-	[kFormRelativePosition release];
-	[kFormRange release];
-	[kFormTest release];
 	// miscellaneous
-	[kClassProperty release];
 	specifierModulesAreInitialized = NO;
 }
 
@@ -141,18 +121,11 @@ void disposeSpecifierModule(void) {
 - (id)initWithContainer:(AEMSpecifier *)container_ key:(id)key_ {
 	self = [super init];
 	if (!self) return self;
-	[container_ retain];
 	container = container_;
-	[key_ retain];
 	key = key_;
 	return self;
 }
 
-- (void)dealloc {
-	[container release];
-	[key release];
-	[super dealloc];
-}
 
 // reserved methods
 
@@ -200,21 +173,15 @@ void disposeSpecifierModule(void) {
 	self = [super initWithContainer: nil key: nil];
 	if (!self) return self;
 	reference = nil;
-	desc = [desc_ retain];
-	codecs = [codecs_ retain];
+	desc = desc_;
+	codecs = codecs_;
 	return self;
 }
 
-- (void)dealloc {
-	[reference release];
-	[desc release];
-	[codecs release];
-	[super dealloc];
-}
 
 - (id)realReference { // used internally
 	if (!reference)
-		reference = [[codecs fullyUnpackObjectSpecifier: desc] retain];
+		reference = [codecs fullyUnpackObjectSpecifier: desc];
 	return reference;
 }
 
@@ -318,79 +285,79 @@ void disposeSpecifierModule(void) {
 // Comparison and logic tests
 
 - (AEMGreaterThanTest *)greaterThan:(id)object {
-	return [[[AEMGreaterThanTest alloc] initWithOperand1: self operand2: object] autorelease];
+	return [[AEMGreaterThanTest alloc] initWithOperand1: self operand2: object];
 }
 
 - (AEMGreaterOrEqualsTest *)greaterOrEquals:(id)object {
-	return [[[AEMGreaterOrEqualsTest alloc] initWithOperand1: self operand2: object] autorelease];
+	return [[AEMGreaterOrEqualsTest alloc] initWithOperand1: self operand2: object];
 }
 
 - (AEMEqualsTest *)equals:(id)object {
-	return [[[AEMEqualsTest alloc] initWithOperand1: self operand2: object] autorelease];
+	return [[AEMEqualsTest alloc] initWithOperand1: self operand2: object];
 }
 
 - (AEMNotEqualsTest *)notEquals:(id)object {
-	return [[[AEMNotEqualsTest alloc] initWithOperand1: self operand2: object] autorelease];
+	return [[AEMNotEqualsTest alloc] initWithOperand1: self operand2: object];
 }
 
 - (AEMLessThanTest *)lessThan:(id)object {
-	return [[[AEMLessThanTest alloc] initWithOperand1: self operand2: object] autorelease];
+	return [[AEMLessThanTest alloc] initWithOperand1: self operand2: object];
 }
 
 - (AEMLessOrEqualsTest *)lessOrEquals:(id)object {
-	return [[[AEMLessOrEqualsTest alloc] initWithOperand1: self operand2: object] autorelease];
+	return [[AEMLessOrEqualsTest alloc] initWithOperand1: self operand2: object];
 }
 
 - (AEMBeginsWithTest *)beginsWith:(id)object {
-	return [[[AEMBeginsWithTest alloc] initWithOperand1: self operand2: object] autorelease];
+	return [[AEMBeginsWithTest alloc] initWithOperand1: self operand2: object];
 }
 
 - (AEMEndsWithTest *)endsWith:(id)object {
-	return [[[AEMEndsWithTest alloc] initWithOperand1: self operand2: object] autorelease];
+	return [[AEMEndsWithTest alloc] initWithOperand1: self operand2: object];
 }
 
 - (AEMContainsTest *)contains:(id)object {
-	return [[[AEMContainsTest alloc] initWithOperand1: self operand2: object] autorelease];
+	return [[AEMContainsTest alloc] initWithOperand1: self operand2: object];
 }
 
 - (AEMIsInTest *)isIn:(id)object {
-	return [[[AEMIsInTest alloc] initWithOperand1: self operand2: object] autorelease];
+	return [[AEMIsInTest alloc] initWithOperand1: self operand2: object];
 }
 
 
 // Insertion location selectors
 
 - (AEMInsertionSpecifier *)beginning {
-	return [[[AEMInsertionSpecifier alloc] initWithContainer: self key: kEnumBeginning] autorelease];
+	return [[AEMInsertionSpecifier alloc] initWithContainer: self key: kEnumBeginning];
 }
 
 - (AEMInsertionSpecifier *)end {
-	return [[[AEMInsertionSpecifier alloc] initWithContainer: self key: kEnumEnd] autorelease];
+	return [[AEMInsertionSpecifier alloc] initWithContainer: self key: kEnumEnd];
 }
 
 - (AEMInsertionSpecifier *)before {
-	return [[[AEMInsertionSpecifier alloc] initWithContainer: self key: kEnumBefore] autorelease];
+	return [[AEMInsertionSpecifier alloc] initWithContainer: self key: kEnumBefore];
 }
 
 - (AEMInsertionSpecifier *)after {
-	return [[[AEMInsertionSpecifier alloc] initWithContainer: self key: kEnumAfter] autorelease];
+	return [[AEMInsertionSpecifier alloc] initWithContainer: self key: kEnumAfter];
 }
 
 
 // property and all-element specifiers
 
 - (AEMPropertySpecifier *)property:(OSType)propertyCode {
-	return [[[AEMPropertySpecifier alloc]
+	return [[AEMPropertySpecifier alloc]
 					   initWithContainer: self
 									 key: [NSAppleEventDescriptor descriptorWithTypeCode: propertyCode]
-								wantCode: cProperty] autorelease];
+								wantCode: cProperty];
 }
 
 - (AEMUserPropertySpecifier *)userProperty:(NSString *)propertyName {
-	return [[[AEMUserPropertySpecifier alloc]
+	return [[AEMUserPropertySpecifier alloc]
 						   initWithContainer: self
 										 key: propertyName
-									wantCode: cProperty] autorelease];
+									wantCode: cProperty];
 }
 
 - (AEMAllElementsSpecifier *)elements:(OSType)classCode {
@@ -404,17 +371,17 @@ void disposeSpecifierModule(void) {
 // by-relative-position selectors
 
 - (AEMElementByRelativePositionSpecifier *)previous:(OSType)classCode {
-	return [[[AEMElementByRelativePositionSpecifier alloc]
+	return [[AEMElementByRelativePositionSpecifier alloc]
 										initWithContainer: self
 													  key: kEnumPrevious
-												 wantCode: classCode] autorelease];
+												 wantCode: classCode];
 }
 
 - (AEMElementByRelativePositionSpecifier *)next:(OSType)classCode {
-	return [[[AEMElementByRelativePositionSpecifier alloc]
+	return [[AEMElementByRelativePositionSpecifier alloc]
 										initWithContainer: self
 													  key: kEnumNext
-												 wantCode: classCode] autorelease];
+												 wantCode: classCode];
 }
 
 @end
@@ -677,91 +644,91 @@ void disposeSpecifierModule(void) {
 // ordinal selectors
 
 - (AEMElementByOrdinalSpecifier *)first {
-	return [[[AEMElementByOrdinalSpecifier alloc]
+	return [[AEMElementByOrdinalSpecifier alloc]
 							   initWithContainer: self
 											 key: kOrdinalFirst
-										wantCode: wantCode] autorelease];
+										wantCode: wantCode];
 }
 
 - (AEMElementByOrdinalSpecifier *)middle {
-	return [[[AEMElementByOrdinalSpecifier alloc]
+	return [[AEMElementByOrdinalSpecifier alloc]
 							   initWithContainer: self
 											 key: kOrdinalMiddle
-										wantCode: wantCode] autorelease];
+										wantCode: wantCode];
 }
 
 - (AEMElementByOrdinalSpecifier *)last {
-	return [[[AEMElementByOrdinalSpecifier alloc]
+	return [[AEMElementByOrdinalSpecifier alloc]
 							   initWithContainer: self
 											 key: kOrdinalLast
-										wantCode: wantCode] autorelease];
+										wantCode: wantCode];
 }
 
 - (AEMElementByOrdinalSpecifier *)any {
-	return [[[AEMElementByOrdinalSpecifier alloc]
+	return [[AEMElementByOrdinalSpecifier alloc]
 							   initWithContainer: self
 											 key: kOrdinalAny
-										wantCode: wantCode] autorelease];
+										wantCode: wantCode];
 }
 
 
 // by-index, by-name, by-id selectors
  
 - (AEMElementByIndexSpecifier *)at:(int)index {
-	return [[[AEMElementByIndexSpecifier alloc]
+	return [[AEMElementByIndexSpecifier alloc]
 							 initWithContainer: self
 										   key: [NSNumber numberWithInt: index]
-									  wantCode: wantCode] autorelease];
+									  wantCode: wantCode];
 }
 
 - (AEMElementByIndexSpecifier *)byIndex:(id)index { // index is normally NSNumber, but may occasionally be other types where target application accepts it (e.g. Finder also accepts typeAlias)
-	return [[[AEMElementByIndexSpecifier alloc]
+	return [[AEMElementByIndexSpecifier alloc]
 							 initWithContainer: self
 										   key: index
-									  wantCode: wantCode] autorelease];
+									  wantCode: wantCode];
 }
 
 - (AEMElementByNameSpecifier *)byName:(id)name {
-	return [[[AEMElementByNameSpecifier alloc]
+	return [[AEMElementByNameSpecifier alloc]
 							initWithContainer: self
 										  key: name
-									 wantCode: wantCode] autorelease];
+									 wantCode: wantCode];
 }
 
 - (AEMElementByIDSpecifier *)byID:(id)id_ {
-	return [[[AEMElementByIDSpecifier alloc]
+	return [[AEMElementByIDSpecifier alloc]
 						  initWithContainer: self
 										key: id_
-								   wantCode: wantCode] autorelease];
+								   wantCode: wantCode];
 }
 
 // by-range selector
 
 - (AEMElementsByRangeSpecifier *)at:(int)startIndex to:(int)stopIndex {
-	return [[[AEMElementsByRangeSpecifier alloc]
+	return [[AEMElementsByRangeSpecifier alloc]
 							  initWithContainer: self
 										  start: [[AEMCon elements: wantCode] at: startIndex]
 										   stop: [[AEMCon elements: wantCode] at: stopIndex]
-									   wantCode: wantCode] autorelease];
+									   wantCode: wantCode];
 }
 
 // takes two app- or con-based references, expanding any other values as necessary
 - (AEMElementsByRangeSpecifier *)byRange:(id)startReference to:(id)stopReference { 
-	return [[[AEMElementsByRangeSpecifier alloc]
+	return [[AEMElementsByRangeSpecifier alloc]
 							  initWithContainer: self
 										  start: startReference
 										   stop: stopReference
-									   wantCode: wantCode] autorelease];
+									   wantCode: wantCode];
 }
 
 
 // by-test selector
 
 - (AEMElementsByTestSpecifier *)byTest:(AEMTest *)testReference {
-	return [[[AEMElementsByTestSpecifier alloc]
+	return [[AEMElementsByTestSpecifier alloc]
 							 initWithContainer: self
 										   key: testReference
-									  wantCode: wantCode] autorelease];
+									  wantCode: wantCode];
 }
 
 @end
@@ -775,8 +742,8 @@ void disposeSpecifierModule(void) {
 			   wantCode:(OSType)wantCode_ {
 	self = [super initWithContainer: [container_ trueSelf] key: nil wantCode: wantCode_];
 	if (!self) return self;
-	startReference = [startReference_ retain];
-	stopReference = [stopReference_ retain];
+	startReference = startReference_;
+	stopReference = stopReference_;
 	return self;
 }
 
@@ -794,11 +761,6 @@ void disposeSpecifierModule(void) {
 }
 
 
-- (void)dealloc {
-	[startReference release];
-	[stopReference release];
-	[super dealloc];
-}
 
 - (NSString *)description {
 	return [NSString stringWithFormat: @"[%@ byRange: %@ to: %@]",
@@ -890,7 +852,6 @@ void disposeSpecifierModule(void) {
 	
 	shim = [[AEMUnkeyedElementsShim alloc] initWithContainer: container_ wantCode: wantCode_];
 	self = [super initWithContainer: shim key: kOrdinalAll wantCode: wantCode_];
-	[shim release];
 	return self;
 }
 
@@ -1018,9 +979,9 @@ void disposeSpecifierModule(void) {
 	if (!root) {
 		if (!specifierModulesAreInitialized) initSpecifierModule();
 		root = [[AEMCurrentContainerRoot alloc] initWithContainer: nil key: nil wantCode: '????'];
-		[root setCachedDesc: [[[NSAppleEventDescriptor alloc] initWithDescriptorType: typeCurrentContainer
+		[root setCachedDesc: [[NSAppleEventDescriptor alloc] initWithDescriptorType: typeCurrentContainer
 																			  bytes: NULL
-																			 length: 0] autorelease]];
+																			 length: 0]];
 	}
 	return root;
 }
@@ -1044,9 +1005,9 @@ void disposeSpecifierModule(void) {
 	if (!root) {
 		if (!specifierModulesAreInitialized) initSpecifierModule();
 		root = [[AEMObjectBeingExaminedRoot alloc] initWithContainer: nil key: nil wantCode: '????'];
-		[root setCachedDesc: [[[NSAppleEventDescriptor alloc] initWithDescriptorType: typeObjectBeingExamined
+		[root setCachedDesc: [[NSAppleEventDescriptor alloc] initWithDescriptorType: typeObjectBeingExamined
 																			  bytes: NULL
-																			 length: 0] autorelease]];
+																			 length: 0]];
 	}
 	return root;
 }
@@ -1066,13 +1027,13 @@ void disposeSpecifierModule(void) {
 
 + (AEMCustomRoot *)customRootWithObject:(id)rootObject_ {
 	if (!specifierModulesAreInitialized) initSpecifierModule();
-	return [[[self alloc] initWithObject: rootObject_] autorelease];
+	return [[self alloc] initWithObject: rootObject_];
 }
 
 - (id)initWithObject:(id)rootObject_ {
 	self = [super initWithContainer: nil key: nil wantCode: '????'];
 	if (!self) return self;
-	rootObject = [rootObject_ retain];
+	rootObject = rootObject_;
 	return self;
 }
 
@@ -1092,10 +1053,6 @@ void disposeSpecifierModule(void) {
 	return rootObject;
 }
 
-- (void)dealloc {
-	[rootObject release];
-	[super dealloc];
-}
 
 - (NSString *)description {
 	return [NSString stringWithFormat: @"AEMRoot(%@)", [AEMObjectRenderer formatObject: rootObject]];

@@ -19,30 +19,24 @@
 															 bytes: &code_
 															length: sizeof(code_)];
 	constantObj =  [[self alloc] initWithName: name_ descriptor: desc_];
-	[desc_ release];
 	return constantObj;
 }
 
 - (id)initWithName:(NSString *)name_ descriptor:(NSAppleEventDescriptor *)desc_ {
 	self = [super init];
 	if (!self) return self;
-	name = [name_ retain];
-	desc = [desc_ retain];
+	name = name_;
+	desc = desc_;
 	return self;
 }
 
-- (void)dealloc {
-	[name release];
-	[desc release];
-	[super dealloc];
-}
 
 - (NSString *)description {
 	return [NSString stringWithFormat: @"[%@ %@]", [self class], name];
 }
 
 - (id)copyWithZone:(NSZone *)zone {
-	return [self retain];
+	return self;
 }
 
 - (NSString *)AS_name {

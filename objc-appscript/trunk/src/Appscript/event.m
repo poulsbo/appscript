@@ -67,7 +67,6 @@ static ASEventAttributeDescription *attributeKeys[] = {
 	self = [super init];
 	if (!self) return self;
 	event = event_; // note: AEMEvent instance takes ownership of the given AppleEvent descriptor
-	[codecs_ retain];
 	codecs = codecs_;
 	sendProc = sendProc_;
 	resultFormat = kAEMUnpackAsItem;
@@ -78,15 +77,8 @@ static ASEventAttributeDescription *attributeKeys[] = {
 - (void)dealloc {
 	AEDisposeDesc(event);
 	free(event);
-	[codecs release];
-	[super dealloc];
 }
 
--(void)finalize {
-	AEDisposeDesc(event);
-	free(event);
-	[super finalize];
-}
 
 - (NSString *)description {
 	AEDesc aeDesc;
@@ -106,7 +98,6 @@ static ASEventAttributeDescription *attributeKeys[] = {
 			[result appendFormat: @"\n    %@ = %@;", 
 					attributeKeys[i].name,
 					[[AEMCodecs defaultCodecs] unpack: descriptor]];
-			[descriptor release];
 		}
 		i += 1;
 	} while (attributeKeys[i].name != nil);
@@ -115,7 +106,6 @@ static ASEventAttributeDescription *attributeKeys[] = {
 	if (err) return nil;
 	descriptor = [[NSAppleEventDescriptor alloc] initWithAEDescNoCopy: &aeDesc];
 	[result appendFormat: @"%@>", [[AEMCodecs defaultCodecs] unpack: descriptor]];
-	[descriptor release];
 	return (NSString *)result;
 }
 
@@ -136,7 +126,7 @@ static ASEventAttributeDescription *attributeKeys[] = {
 	AppleEvent eventCopy;
 	
 	AEDuplicateDesc(event, &eventCopy);
-	return [[[NSAppleEventDescriptor alloc] initWithAEDescNoCopy: &eventCopy] autorelease];
+	return [[NSAppleEventDescriptor alloc] initWithAEDescNoCopy: &eventCopy];
 }
 
 // Pack event's attributes and parameters, if any.
@@ -174,7 +164,7 @@ static ASEventAttributeDescription *attributeKeys[] = {
 			*error = [NSError errorWithDomain: kASErrorDomain code: err userInfo: nil];
 		return nil;
 	}
-	desc = [[[NSAppleEventDescriptor alloc] initWithAEDescNoCopy: &aeDesc] autorelease];
+	desc = [[NSAppleEventDescriptor alloc] initWithAEDescNoCopy: &aeDesc];
 	return [codecs unpack: desc];
 }
 
@@ -194,7 +184,7 @@ static ASEventAttributeDescription *attributeKeys[] = {
 			*error = [NSError errorWithDomain: kASErrorDomain code: err userInfo: nil];
 		return nil;
 	}
-	desc = [[[NSAppleEventDescriptor alloc] initWithAEDescNoCopy: &aeDesc] autorelease];
+	desc = [[NSAppleEventDescriptor alloc] initWithAEDescNoCopy: &aeDesc];
 	return [codecs unpack: desc];
 }
 
@@ -307,14 +297,12 @@ static ASEventAttributeDescription *attributeKeys[] = {
 				[errorInfo setValue: [codecs unpack: errorType] forKey: kASErrorExpectedTypeKey];
 			*error = [NSError errorWithDomain: kASErrorDomain code: errorNumber userInfo: errorInfo];
 		}
-		[replyData release];
 		return nil;
 	}
 	/*
 	 * Check for an application result, returning NSNull instance if none was given
 	 */
 	result = [replyData paramDescriptorForKeyword: keyAEResult];
-	[replyData release];
 	if (!result) goto noResult;
 	/*
 	 * If client invoked -setUnpackFormat:type: with kAEMDontUnpack format, return the descriptor as-is

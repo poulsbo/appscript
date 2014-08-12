@@ -31,18 +31,13 @@
 - (id)initWithName:(NSString *)name_ eventClass:(OSType)eventClass_ eventID:(OSType)eventID_ {
 	self = [super init];
 	if (!self) return self;
-	name = [name_ retain];
+	name = name_;
 	eventClass = eventClass_;
 	eventID = eventID_;
 	parameters = [[NSMutableDictionary alloc] init];
 	return self;
 }
 
-- (void)dealloc {
-	[name release];
-	[parameters release];
-	[super dealloc];
-}
 
 - (NSString *)description {
 	return [NSString stringWithFormat: @"<ASCommandDef \"%@\" '%@'/'%@' %@>", 
@@ -88,10 +83,10 @@
 	if (!self) return self;
 	keywordCache = [[NSMutableDictionary alloc] init];
 	if (converter_)
-		converter = [converter_ retain];
+		converter = converter_;
 	else
 		converter = [[ASNullConverter alloc] init];
-	defaultTerms = [defaultTerms_ retain];
+	defaultTerms = defaultTerms_;
 	if (defaultTerms_) {
 		typeByName = [[NSMutableDictionary alloc] initWithDictionary: [defaultTerms_ typeByNameTable]];
 		typeByCode = [[NSMutableDictionary alloc] initWithDictionary: [defaultTerms_ typeByCodeTable]];
@@ -145,19 +140,6 @@
 	}
 }
 
-- (void)dealloc {
-	[typeByName release];
-	[typeByCode release];
-	[propertyByName release];
-	[propertyByCode release];
-	[elementByName release];
-	[elementByCode release];
-	[commandByName release];
-	[converter release];
-	[defaultTerms release];
-	[keywordCache release];
-	[super dealloc];
-}
 
 
 //
@@ -210,7 +192,6 @@
 																bytes: (void *)(&code)
 															   length: sizeof(code)];
 		[typeByName setObject: desc forKey: name];
-		[desc release];
 	}
 }
 
@@ -297,7 +278,6 @@
 			[commandDef addParameterWithName: parameterName code: [parameterDef fourCharCode]];
 		}
 		[commandByName setObject: commandDef forKey: name];
-		[commandDef release];
 	}
 }
 

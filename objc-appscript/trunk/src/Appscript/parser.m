@@ -35,10 +35,6 @@
 
 @implementation ASParserDef
 
-- (void)dealloc {
-	[name release];
-	[super dealloc];
-}
 
 - (id)init {
 	return nil;
@@ -47,7 +43,6 @@
 - (id)initWithName:(NSString*)name_ code:(OSType)code_ {
 	self = [super init];
 	if (!self) return self;
-	[name_ retain];
 	name = name_;
 	code = code_;
 	hash = [name hash] + (NSUInteger)code;
@@ -98,10 +93,6 @@
 	return self;
 }
 
-- (void)dealloc {
-	[parameters release];
-	[super dealloc];
-}
 
 - (OSType)eventClass {
 	return classCode;
@@ -158,17 +149,6 @@
 	return self;
 }
 
-- (void)dealloc {
-	[commands release];
-	[properties release];
-	[elements release];
-	[classes release];
-	[enumerators release];
-	[classAndElementDefsByCode release];
-	[foundClassCodes release];
-	[foundElementCodes release];
-	[super dealloc];
-}
 
 // Data source methods
 
@@ -256,12 +236,8 @@
 		ALIGN;
 		SKIP_UINT16;	// flags
 		[commandDef addParameter: paramDef];
-		[paramDef release];
-		[paramName release];
 		CHECK_CURSOR;
 	}
-	[commandDef release];
-	[name release];
 }
 
 - (void)parseClass {
@@ -303,9 +279,7 @@
 			else if (![properties containsObject: propertyDef])
 				// add to list of property definitions
 				[properties addObject: propertyDef];
-			[propertyDef release];
 		}
-		[propertyName release];
 		CHECK_CURSOR;
 	}
 	// skip elements
@@ -334,8 +308,6 @@
 		}
 	}
 	[classAndElementDefsByCode setObject: classDef forKey: code];
-	[classDef release];
-	[className release];
 }
 
 - (void)parseComparison { // comparison info isn't used
@@ -368,8 +340,6 @@
 		ALIGN;
 		if (![enumerators containsObject: enumeratorDef])
 			[enumerators addObject: enumeratorDef];
-		[enumeratorDef release];
-		[name release];
 		CHECK_CURSOR;
 	}
 }

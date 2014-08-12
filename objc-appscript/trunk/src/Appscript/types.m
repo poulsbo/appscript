@@ -98,22 +98,17 @@ static ASBoolean *falseValue;
 	furl = [[NSAppleEventDescriptor alloc] initWithDescriptorType: typeFileURL
 															 data: data];
 	result = [self initWithDescriptor: furl];
-	[furl release];
 	return result;
 }
 
 - (id)initWithDescriptor:(NSAppleEventDescriptor *)desc_ {
 	self = [super init];
 	if (!self) return self;
-	desc = [[desc_ coerceToDescriptorType: [self descriptorType]] retain];
+	desc = [desc_ coerceToDescriptorType: [self descriptorType]];
 	if (!desc) return nil; // failed coercion, e.g. due to creating an ASAlias with a typeFileURL descriptor for a non-existent file
 	return self;
 }
 
-- (void)dealloc {
-	[desc release];
-	[super dealloc];
-}
 
 - (NSUInteger)hash {
 	return [desc hash];
@@ -137,7 +132,6 @@ static ASBoolean *falseValue;
 	data = [[desc coerceToDescriptorType: typeFileURL] data];
 	string = [[NSString alloc] initWithData: data encoding: NSUTF8StringEncoding];
 	url = [NSURL URLWithString: string];
-	[string release];
 	return url;
 }
 
@@ -159,15 +153,15 @@ static ASBoolean *falseValue;
 @implementation ASAlias
 
 + (id)aliasWithPath:(NSString *)path {
-	return [[[ASAlias alloc] initWithPath: path] autorelease];
+	return [[ASAlias alloc] initWithPath: path];
 }
 
 + (id)aliasWithFileURL:(NSURL *)url {
-	return [[[ASAlias alloc] initWithFileURL: url] autorelease];
+	return [[ASAlias alloc] initWithFileURL: url];
 }
 
 + (id)aliasWithDescriptor:(NSAppleEventDescriptor *)desc_ {
-	return [[[ASAlias alloc] initWithDescriptor: desc_] autorelease];
+	return [[ASAlias alloc] initWithDescriptor: desc_];
 }
 
 + (id)aliasWithAliasHandle:(AliasHandle)alias {
@@ -178,7 +172,6 @@ static ASBoolean *falseValue;
 															bytes: *alias
 														   length: GetAliasSize(alias)];
 	obj = [self aliasWithDescriptor: desc];
-	[desc release];
 	return obj;
 }
 
@@ -204,15 +197,15 @@ static ASBoolean *falseValue;
 @implementation ASFileRef
 
 + (id)fileRefWithPath:(NSString *)path {
-	return [[[ASFileRef alloc] initWithPath: path] autorelease];
+	return [[ASFileRef alloc] initWithPath: path];
 }
 
 + (id)fileRefWithFileURL:(NSURL *)url {
-	return [[[ASFileRef alloc] initWithFileURL: url] autorelease];
+	return [[ASFileRef alloc] initWithFileURL: url];
 }
 
 + (id)fileRefWithDescriptor:(NSAppleEventDescriptor *)desc_ {
-	return [[[ASFileRef alloc] initWithDescriptor: desc_] autorelease];
+	return [[ASFileRef alloc] initWithDescriptor: desc_];
 }
 
 + (id)fileRefWithFSRef:(FSRef)fsRef {
@@ -223,7 +216,6 @@ static ASBoolean *falseValue;
 															bytes: &fsRef
 														   length: sizeof(fsRef)];
 	obj = [self fileRefWithDescriptor: desc];
-	[desc release];
 	return obj;
 }
 
@@ -249,15 +241,15 @@ static ASBoolean *falseValue;
 @implementation ASFileSpec
 
 + (id)fileSpecWithPath:(NSString *)path {
-	return [[[ASFileSpec alloc] initWithPath: path] autorelease];
+	return [[ASFileSpec alloc] initWithPath: path];
 }
 
 + (id)fileSpecWithFileURL:(NSURL *)url {
-	return [[[ASFileSpec alloc] initWithFileURL: url] autorelease];
+	return [[ASFileSpec alloc] initWithFileURL: url];
 }
 
 + (id)fileSpecWithDescriptor:(NSAppleEventDescriptor *)desc_ {
-	return [[[ASFileSpec alloc] initWithDescriptor: desc_] autorelease];
+	return [[ASFileSpec alloc] initWithDescriptor: desc_];
 }
 
 - (NSString *)description {
@@ -289,7 +281,6 @@ static ASBoolean *falseValue;
 	if (!self) return self;
 	type = type_;
 	code = code_;
-	[desc retain];
 	cachedDesc = desc;
 	return self;
 }
@@ -304,10 +295,6 @@ static ASBoolean *falseValue;
 	return nil;
 }
 
-- (void)dealloc {
-	[cachedDesc release];
-	[super dealloc];
-}
 
 - (NSUInteger)hash {
 	return (NSUInteger)[self fourCharCode];
@@ -340,7 +327,7 @@ static ASBoolean *falseValue;
 }
 
 - (id)copyWithZone:(NSZone *)zone {
-	return [self retain];
+	return self;
 }
 
 @end
@@ -352,7 +339,7 @@ static ASBoolean *falseValue;
 @implementation AEMType
 
 + (id)typeWithCode:(OSType)code_ {
-	return [[[AEMType alloc] initWithCode: code_] autorelease];
+	return [[AEMType alloc] initWithCode: code_];
 }
 
 - (id)initWithCode:(OSType)code_ {
@@ -369,7 +356,7 @@ static ASBoolean *falseValue;
 @implementation AEMEnum
 
 + (id)enumWithCode:(OSType)code_ {
-	return [[[AEMEnum alloc] initWithCode: code_] autorelease];
+	return [[AEMEnum alloc] initWithCode: code_];
 }
 
 - (id)initWithCode:(OSType)code_ {
@@ -386,7 +373,7 @@ static ASBoolean *falseValue;
 @implementation AEMProperty
 
 + (id)propertyWithCode:(OSType)code_ {
-	return [[[AEMProperty alloc] initWithCode: code_] autorelease];
+	return [[AEMProperty alloc] initWithCode: code_];
 }
 
 - (id)initWithCode:(OSType)code_ {
@@ -403,7 +390,7 @@ static ASBoolean *falseValue;
 @implementation AEMKeyword
 
 + (id)keywordWithCode:(OSType)code_ {
-	return [[[AEMKeyword alloc] initWithCode: code_] autorelease];
+	return [[AEMKeyword alloc] initWithCode: code_];
 }
 
 - (id)initWithCode:(OSType)code_ {
@@ -423,30 +410,25 @@ static ASBoolean *falseValue;
 @implementation ASUnits
 
 + (id)unitsWithNumber:(NSNumber *)value_ type:(NSString *)units_ {
-	return [[[ASUnits alloc] initWithNumber: value_ type: units_] autorelease];
+	return [[ASUnits alloc] initWithNumber: value_ type: units_];
 }
 
 + (id)unitsWithInt:(int)value_ type:(NSString *)units_ {
-	return [[[ASUnits alloc] initWithNumber: [NSNumber numberWithInt: value_] type: units_] autorelease];
+	return [[ASUnits alloc] initWithNumber: [NSNumber numberWithInt: value_] type: units_];
 }
 
 + (id)unitsWithDouble:(double)value_ type:(NSString *)units_ {
-	return [[[ASUnits alloc] initWithNumber: [NSNumber numberWithDouble: value_] type: units_] autorelease];
+	return [[ASUnits alloc] initWithNumber: [NSNumber numberWithDouble: value_] type: units_];
 }
 
 - (id)initWithNumber:(NSNumber *)value_ type:(NSString *)units_ {
 	self = [super init];
 	if (!self) return self;
-	value = [value_ retain];
-	units = [units_ retain];
+	value = value_;
+	units = units_;
 	return self;
 }
 
-- (void)dealloc {
-	[value release];
-	[units release];
-	[super dealloc];
-}
 
 - (NSString *)description {
 	return [NSString stringWithFormat: @"[ASUnits unitsWithNumber: %@ type: %@]", 

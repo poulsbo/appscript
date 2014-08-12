@@ -18,29 +18,21 @@
 	if (!self) return self;
 	aemApplicationClass = appClass;
 	targetType = type;
-	targetData = [data retain];
+	targetData = data;
 	target = nil;
 	[self setRelaunchMode: kASRelaunchSpecial];
 	return self;
 }
 
-- (void)dealloc {
-	[targetData release];
-	[target release];
-	[super dealloc];
-}
 
 - (id)copyWithZone:(NSZone *)zone {
 	ASAppDataBase *obj = [super copyWithZone: zone];
 	if (!obj) return obj;
-	[obj->targetData retain];
-	[obj->target retain];
 	return obj;
 }
 
 - (BOOL)connectWithError:(out NSError **)error {
 	if (target) {
-		[target release];
 		target = nil;
 	}
 	switch (targetType) {

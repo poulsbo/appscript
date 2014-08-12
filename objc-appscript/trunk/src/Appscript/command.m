@@ -17,11 +17,11 @@ static NSAppleEventDescriptor *defaultIgnore;
 				 eventID:(AEEventID)code
 		 directParameter:(id)directParameter
 		 parentReference:(id)parentReference {
-	return [[[[self class] alloc] initWithAppData: appData
+	return [[[self class] alloc] initWithAppData: appData
 									   eventClass: classCode
 										  eventID: code
 								  directParameter: directParameter
-								  parentReference: parentReference] autorelease];
+								  parentReference: parentReference];
 }
 
 - (id)initWithAppData:(id)appData
@@ -51,7 +51,7 @@ static NSAppleEventDescriptor *defaultIgnore;
 		}
 	}
 	// create new AEMEvent instance
-	AS_event = [[target eventWithEventClass: classCode eventID: code codecs: appData] retain];
+	AS_event = [target eventWithEventClass: classCode eventID: code codecs: appData];
 	// set event's direct parameter and/or subject attribute
 	// note: AEMEvent/AEMCodecs instance will raise exception if this fails
 	if (directParameter != (__bridge id)kASNoDirectParameter)
@@ -64,15 +64,10 @@ static NSAppleEventDescriptor *defaultIgnore;
 		[AS_event setAttribute: parentReference forKeyword: keySubjectAttr];
 	return self;
 fail:
-	[targetError retain];
+	;
 	return self;
 }
 
-- (void)dealloc {
-	[AS_event release];
-	[targetError release];
-	[super dealloc];
-}
 
 - (AEMEvent *)AS_aemEvent {
 	return AS_event;
@@ -168,9 +163,8 @@ fail:
 																			 bytes: &considsAndIgnoresFlags
 																			length: sizeof(considsAndIgnoresFlags)];
 	[AS_event setAttribute: considerAndIgnoreDesc forKeyword: enumConsidsAndIgnores];
-	[considerAndIgnoreDesc release];
 	if (!defaultIgnore) {
-		defaultIgnore = [[NSAppleEventDescriptor listDescriptor] retain];
+		defaultIgnore = [NSAppleEventDescriptor listDescriptor];
 		[defaultIgnore insertDescriptor: [NSAppleEventDescriptor descriptorWithEnumCode: kAECase] 
 								atIndex: 0];
 	}

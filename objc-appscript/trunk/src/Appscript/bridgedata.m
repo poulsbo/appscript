@@ -15,25 +15,16 @@
 			  keywordConverter:(id)converter_ {
 	self = [super initWithApplicationClass: appClass targetType: type targetData: data];
 	if (!self) return self;
-	terms = [terms_ retain];
-	defaultTerms = [defaultTerms_ retain];
-	converter = [converter_ retain];
+	terms = terms_;
+	defaultTerms = defaultTerms_;
+	converter = converter_;
 	return self;
 }
 
-- (void)dealloc {
-	[terms release];
-	[defaultTerms release];
-	[converter release];
-	[super dealloc];
-}
 
 - (id)copyWithZone:(NSZone *)zone {
 	ASBridgeData *obj = [super copyWithZone: zone];
 	if (!obj) return obj;
-	[obj->terms retain];
-	[obj->defaultTerms retain];
-	[obj->converter retain];
 	return obj;
 }
 
@@ -55,7 +46,6 @@
 	
 	if (![super connectWithError: error]) return NO;
 	if ([terms isEqual: ASTrue]) { // obtain terminology from application
-		[terms release];
 		aetes = [self aetesWithError: error];
 		if (!aetes) return NO;
 		parser = [[ASAETEParser alloc] init];
@@ -66,10 +56,8 @@
 			   properties: [parser properties]
 				 elements: [parser elements]
 				 commands: [parser commands]];
-		[parser release];
 	} else if ([terms isEqual: ASFalse]) { // use built-in terminology only (e.g. use this when running AppleScript applets)
-		[terms release];
-		terms = [defaultTerms retain];
+		terms = defaultTerms;
 	} else { // terms is [assumed to be] an ASAETEParser instance or equivalent object containing raw (dumped) terminology
 		tmp = [[ASTerminology alloc] initWithKeywordConverter: converter defaultTerminology: defaultTerms];
 		[tmp addClasses: [(ASAETEParser *)terms classes] 
@@ -77,7 +65,6 @@
 			 properties: [(ASAETEParser *)terms properties] 
 			   elements: [(ASAETEParser *)terms elements] 
 			   commands: [(ASAETEParser *)terms commands]];
-		[terms release];
 		terms = tmp;
 	}
 	return YES;

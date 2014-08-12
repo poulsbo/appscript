@@ -64,21 +64,17 @@ static AEMDefaultUnitTypeDef *defaultUnitTypes[] = {
 @implementation AEMUnitTypeDefinition
 
 + (id)definitionWithName:(NSString *)name_ code:(DescType)code_ {
-	return [[[[self class] alloc] initWithName: name_ code: code_] autorelease];
+	return [[[self class] alloc] initWithName: name_ code: code_];
 }
 
 - (id)initWithName:(NSString *)name_ code:(DescType)code_ {
 	self = [super init];
 	if (!self) return self;
-	name = [name_ retain];
+	name = name_;
 	code = code_;
 	return self;
 }
 
-- (void)dealloc {
-	[name release];
-	[super dealloc];
-}
 
 - (NSString *)name {
 	return name;
@@ -130,7 +126,6 @@ void AEMGetDefaultUnitTypeDefinitions(NSMutableDictionary **definitionsByName,
 			definition = [[AEMUnitTypeDefinition alloc] initWithName: name code: code];
 			[defaultDefinitionsByName setObject: definition forKey: name];
 			[defaultDefinitionsByCode setObject: definition forKey: [NSNumber numberWithUnsignedInt: code]];
-			[definition release];
 			i++;
 		} while (defaultUnitTypes[i].name);
 	}

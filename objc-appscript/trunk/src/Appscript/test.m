@@ -53,18 +53,7 @@ void initTestModule(void) { // called automatically
 
 void disposeTestModule(void) {
 	// comparison tests
-	[kEnumGreaterThan release];
-	[kEnumGreaterThanEquals release];
-	[kEnumEquals release];
-	[kEnumLessThan release];
-	[kEnumLessThanEquals release];
-	[kEnumBeginsWith release];
-	[kEnumEndsWith release];
-	[kEnumContains release];
 	// logical tests
-	[kEnumAND release];
-	[kEnumOR release];
-	[kEnumNOT release];
 }
 
 
@@ -84,7 +73,7 @@ void disposeTestModule(void) {
 		[allOperands addObjectsFromArray: remainingOperands];
 	else
 		[allOperands addObject: remainingOperands];
-	return [[[AEMANDTest alloc] initWithOperands: allOperands] autorelease];
+	return [[AEMANDTest alloc] initWithOperands: allOperands];
 }
 
 // takes a single test clause or an array of test clauses
@@ -98,11 +87,11 @@ void disposeTestModule(void) {
 		[allOperands addObjectsFromArray: remainingOperands];
 	else
 		[allOperands addObject: remainingOperands];
-	return [[[AEMORTest alloc] initWithOperands: allOperands] autorelease];
+	return [[AEMORTest alloc] initWithOperands: allOperands];
 }
 
 - (AEMNOTTest *)NOT {
-	return [[[AEMNOTTest alloc] initWithOperands: [NSArray arrayWithObject: self]] autorelease];
+	return [[AEMNOTTest alloc] initWithOperands: [NSArray arrayWithObject: self]];
 }
 
 - (NSString *)formatString { // stub method; subclasses will override
@@ -125,18 +114,11 @@ void disposeTestModule(void) {
 - (id)initWithOperand1:(id)operand1_ operand2:(id)operand2_ {
 	self = [super init];
 	if (!self) return self;
-	[operand1_ retain];
-	[operand2_ retain];
 	operand1 = operand1_;
 	operand2 = operand2_;
 	return self;
 }
 
-- (void)dealloc {
-	[operand1 release];
-	[operand2 release];
-	[super dealloc];
-}
 
 - (BOOL)isEqual:(id)object {
 	if (self == object) return YES;
@@ -372,15 +354,10 @@ void disposeTestModule(void) {
 - (id)initWithOperands:(NSArray *)operands_ {
 	self = [super init];
 	if (!self) return self;
-	[operands_ retain];
 	operands = operands_;
 	return self;
 }
 
-- (void)dealloc {
-	[operands release];
-	[super dealloc];
-}
 
 - (BOOL)isEqual:(id)object {
 	if (self == object) return YES;

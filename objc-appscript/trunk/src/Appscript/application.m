@@ -139,7 +139,6 @@ error:
 	
 	app = [[self alloc] initWithDescriptor: desc];
 	[[app eventWithEventClass: 'ascr'  eventID: 'noop'] sendWithError: &err]; // should raise -1708
-	[app release];
 	return err ? ([err code] != procNotFound && [err code] != localOnlyErr) : YES; // not running/no network access
 }
 
@@ -313,8 +312,6 @@ error:
 			addressDesc = targetData;
 	}
 	if (!addressDesc) return nil;
-	[targetData_ retain];
-	[addressDesc retain];
 	// misc
 	defaultCodecs = [[AEMCodecs alloc] init];
 	transactionID = kAnyTransactionID;
@@ -395,12 +392,6 @@ error:
 
 // dealloc
 
-- (void)dealloc {
-	[targetData release];
-	[addressDesc release];
-	[defaultCodecs release];
-	[super dealloc];
-}
 
 
 // comparison, hash support
@@ -510,9 +501,9 @@ error:
 			if (err) return nil;
 		}
 	}
-	return [[[eventClass alloc] initWithEvent: appleEvent 
+	return [[eventClass alloc] initWithEvent: appleEvent 
 									   codecs: codecs 
-									 sendProc: sendProc] autorelease];
+									 sendProc: sendProc];
 }
 
 - (id)eventWithEventClass:(AEEventClass)classCode
@@ -556,8 +547,7 @@ error:
 	if (targetType == kAEMTargetFileURL) {
 		newAddress = [[self class] addressDescForLocalApplication: targetData error: error];
 		if (newAddress) {
-			[addressDesc release];
-			addressDesc = [newAddress retain];
+			addressDesc = newAddress;
 			return YES;
 		}
 	}

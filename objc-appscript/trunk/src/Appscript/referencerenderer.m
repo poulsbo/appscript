@@ -16,14 +16,10 @@
 	self = [super init];
 	if (!self) return self;
 	result = [NSMutableString string];
-	appData = [appData_ retain];
+	appData = appData_;
 	return self;
 }
 
-- (void)dealloc {
-	[appData release];
-	[super dealloc];
-}
 
 
 
@@ -40,7 +36,6 @@
 		string = [renderer result];
 		if (!string)
 			string = [NSString stringWithFormat: @"[%@ AS_referenceWithObject: %@]", [renderer app], object];
-		[renderer release];
 	} else {
 		string = [AEMObjectRenderer formatObject: object];
 	}

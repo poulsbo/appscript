@@ -19,10 +19,6 @@
 	return self;
 }
 
-- (void)dealloc {
-	[cachedDesc release];
-	[super dealloc];
-}
 
 
 - (NSUInteger)hash {
@@ -34,9 +30,7 @@
 
 - (void)setCachedDesc:(NSAppleEventDescriptor *)desc {
 	@synchronized(self) {
-		if (!cachedDesc)
-			[cachedDesc release];
-		cachedDesc = [desc retain];
+		cachedDesc = desc;
 	}
 }
 
@@ -52,7 +46,7 @@
 - (NSAppleEventDescriptor *)packWithCodecs:(id)codecs {
 	@synchronized(self) {
 		if (!cachedDesc)
-			cachedDesc = [[self packWithCodecsNoCache: codecs] retain];
+			cachedDesc = [self packWithCodecsNoCache: codecs];
 	}
 	return cachedDesc;
 }

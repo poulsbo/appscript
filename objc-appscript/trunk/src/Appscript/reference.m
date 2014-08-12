@@ -12,22 +12,17 @@
 @implementation ASReference
 
 + (id)referenceWithAppData:(id)appData aemReference:(id)aemReference {
-	return [[[self alloc] initWithAppData: appData aemReference: aemReference] autorelease];
+	return [[self alloc] initWithAppData: appData aemReference: aemReference];
 }
 
 - (id)initWithAppData:(id)appData aemReference:(id)aemReference {
 	self = [super init];
 	if (!self) return self;
-	AS_appData = [appData retain];
-	AS_aemReference = [aemReference retain];
+	AS_appData = appData;
+	AS_aemReference = aemReference;
 	return self;
 }
 
-- (void)dealloc {
-	[AS_appData release];
-	[AS_aemReference release];
-	[super dealloc];
-}
 
 
 // comparison, hash support

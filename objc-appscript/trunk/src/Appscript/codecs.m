@@ -28,15 +28,13 @@
 - (id)init {
 	self = [super init];
 	if (!self) return self;
-	applicationRootDescriptor = [[NSAppleEventDescriptor nullDescriptor] retain];
+	applicationRootDescriptor = [NSAppleEventDescriptor nullDescriptor];
     //	AEMGetDefaultUnitTypeDefinitions(&unitTypeDefinitionByName, &unitTypeDefinitionByCode);
     // LIU
     NSDictionary *byName = nil, *byCode = nil;
     AEMGetDefaultUnitTypeDefinitions(&byName, &byCode);
     unitTypeDefinitionByName = byName;
     unitTypeDefinitionByCode = byCode;
-	[unitTypeDefinitionByName retain];
-	[unitTypeDefinitionByCode retain];
 	disableCache = NO;
 	disableUnicode = NO;
 	allowUInt64 = NO;
@@ -44,18 +42,11 @@
 }
 
 
-- (void)dealloc {
-	[unitTypeDefinitionByName release];
-	[unitTypeDefinitionByCode release];
-	[applicationRootDescriptor release];
-	[super dealloc];
-}
 
 
 - (id)copyWithZone:(NSZone *)zone {
     AEMCodecs *obj = [self copy]; // LIU (AEMCodecs *)NSCopyObject(self, 0, zone);
 	if (!obj) return obj;
-	[obj->applicationRootDescriptor retain];
 	return obj;
 }
 
@@ -259,8 +250,7 @@
 
 
 - (void)setApplicationRootDescriptor:(NSAppleEventDescriptor *)desc {
-	[applicationRootDescriptor release];
-	applicationRootDescriptor = [desc retain];
+	applicationRootDescriptor = desc;
 }
 
 - (NSAppleEventDescriptor *)applicationRootDescriptor {
@@ -332,7 +322,6 @@
 		case typeFileURL:
 			string = [[NSString alloc] initWithData: [desc data] encoding: NSUTF8StringEncoding];
 			url = [NSURL URLWithString: string];
-			[string release];
 			result = url;
 			break;
 		case typeFSRef:
@@ -503,7 +492,6 @@
 						   forKey: [value objectAtIndex: j]];
 		} else
 			[result setObject: value forKey: [self unpackAERecordKey: key]]; 
-		[valueDesc release];
 	}
 	return result;
 }
@@ -515,19 +503,19 @@
 
 
 - (id)unpackType:(NSAppleEventDescriptor *)desc {
-	return [[[AEMType alloc] initWithDescriptor: desc] autorelease];
+	return [[AEMType alloc] initWithDescriptor: desc];
 }
 
 - (id)unpackEnum:(NSAppleEventDescriptor *)desc {
-	return [[[AEMEnum alloc] initWithDescriptor: desc] autorelease];
+	return [[AEMEnum alloc] initWithDescriptor: desc];
 }
 
 - (id)unpackProperty:(NSAppleEventDescriptor *)desc {
-	return [[[AEMProperty alloc] initWithDescriptor: desc] autorelease];
+	return [[AEMProperty alloc] initWithDescriptor: desc];
 }
 
 - (id)unpackKeyword:(NSAppleEventDescriptor *)desc {
-	return [[[AEMKeyword alloc] initWithDescriptor: desc] autorelease];
+	return [[AEMKeyword alloc] initWithDescriptor: desc];
 }
 
 
@@ -618,13 +606,13 @@
 		case formUniqueID:
 			wantCode = [[desc descriptorForKeyword: keyAEDesiredClass] typeCodeValue];
 			key = [desc descriptorForKeyword: keyAEKeyData];
-			container = [[[AEMDeferredSpecifier alloc] initWithDescriptor: [desc descriptorForKeyword: keyAEContainer]
-																   codecs: self] autorelease];
+			container = [[AEMDeferredSpecifier alloc] initWithDescriptor: [desc descriptorForKeyword: keyAEContainer]
+																   codecs: self];
 			switch (keyForm) {
 				case formPropertyID:
-					ref = [[[AEMPropertySpecifier alloc] initWithContainer: container
+					ref = [[AEMPropertySpecifier alloc] initWithContainer: container
 																	   key: key
-																  wantCode: wantCode] autorelease];
+																  wantCode: wantCode];
 					break;
 				case formAbsolutePosition:
 					if ([key descriptorType] == typeAbsoluteOrdinal) {
@@ -636,23 +624,23 @@
 						else
 							ref = [self fullyUnpackObjectSpecifier: desc]; // do a full unpack of rarely returned reference forms
 					} else {
-						shim = [[[AEMUnkeyedElementsShim alloc] initWithContainer: container wantCode: wantCode] autorelease];
-						ref = [[[AEMElementByIndexSpecifier alloc] initWithContainer: shim
+						shim = [[AEMUnkeyedElementsShim alloc] initWithContainer: container wantCode: wantCode];
+						ref = [[AEMElementByIndexSpecifier alloc] initWithContainer: shim
 																				 key: [self unpack: key]
-																			wantCode: wantCode] autorelease];
+																			wantCode: wantCode];
 					}
 					break;
 				case formName:
-					shim = [[[AEMUnkeyedElementsShim alloc] initWithContainer: container wantCode: wantCode] autorelease];
-					ref = [[[AEMElementByNameSpecifier alloc] initWithContainer: shim
+					shim = [[AEMUnkeyedElementsShim alloc] initWithContainer: container wantCode: wantCode];
+					ref = [[AEMElementByNameSpecifier alloc] initWithContainer: shim
 																			key: [self unpack: key]
-																	   wantCode: wantCode] autorelease];
+																	   wantCode: wantCode];
 					break;
 				case formUniqueID:
-					shim = [[[AEMUnkeyedElementsShim alloc] initWithContainer: container wantCode: wantCode] autorelease];
-					ref = [[[AEMElementByIDSpecifier alloc] initWithContainer: shim
+					shim = [[AEMUnkeyedElementsShim alloc] initWithContainer: container wantCode: wantCode];
+					ref = [[AEMElementByIDSpecifier alloc] initWithContainer: shim
 																		  key: [self unpack: key]
-																	 wantCode: wantCode] autorelease];
+																	 wantCode: wantCode];
 					break;
 			}
 			break;
@@ -780,7 +768,7 @@
 // optional
 
 - (NSString *)unpackApplicationBundleID:(NSAppleEventDescriptor *)desc {
-	return [[[NSString alloc] initWithData: [desc data] encoding: NSUTF8StringEncoding] autorelease];
+	return [[NSString alloc] initWithData: [desc data] encoding: NSUTF8StringEncoding];
 }
 
 - (NSURL *)unpackApplicationURL:(NSAppleEventDescriptor *)desc {
@@ -789,7 +777,6 @@
 	
 	str = [[NSString alloc] initWithData: [desc data] encoding: NSUTF8StringEncoding];
 	url = [NSURL URLWithString: str];
-	[str release];
 	return url;
 }
 

@@ -66,7 +66,6 @@ static NSUInteger dataDescriptionTruncation = (NSUInteger)-1;
 		[tmp replaceOccurrencesOfString: @"\n" withString: @"\\n" options: 0 range: NSMakeRange(0, [tmp length])];
 		[tmp replaceOccurrencesOfString: @"\t" withString: @"\\t" options: 0 range: NSMakeRange(0, [tmp length])];
 		[result appendFormat: @"@\"%@\"", tmp];
-		[tmp release];
 	
 	} else if ([obj isKindOfClass: [NSNumber class]]) {
 		num = (NSNumber *)obj;
@@ -132,7 +131,6 @@ static NSUInteger dataDescriptionTruncation = (NSUInteger)-1;
 	NSMutableString *collector = [[NSMutableString alloc] init];
 	[self formatObject: obj indent: @"" result: collector];
 	result = [NSString stringWithString: collector];
-	[collector release];
 	return result;
 }
 

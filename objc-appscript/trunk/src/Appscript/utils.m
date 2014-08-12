@@ -21,7 +21,6 @@ NSAppleEventDescriptor *AEMNewRecordOfType(DescType descriptorType) {
 	NSAppleEventDescriptor *recordDesc, *desc;
 	recordDesc = [[NSAppleEventDescriptor alloc] initRecordDescriptor];
 	desc = [recordDesc coerceToDescriptorType: descriptorType];
-	[recordDesc release];
 	return desc;
 }
 
