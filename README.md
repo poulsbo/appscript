@@ -1,3 +1,5 @@
+UPDATE: The goal of this fork <https://github.com/poulsbo/appscript> is to bring the Objective C code up to date so that a working `Appscript.framework` can be built for *embedding* within a 10.8+ OS X app. The various configs are pruned out, leaving only Debug and Release, and both of those are configured for embedding, with default build options.
+
 This is Hamish Sanderson's appscript, imported from sourceforge (svn) to github (git).
 
 Original source: <http://sourceforge.net/projects/appscript>
